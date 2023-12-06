@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Customers Bonus page</title>
+  </head>
+  <body>
+    <!--h1 tag thats represent page title-->
+    <h1>Welcome to Bonus Page</h1>
+    <!--button which trigger fetchCustomersDataFromServer function-->
+    <button onclick="fetchCustomersDataFromServer()">Get Customers Data</button>
+    <!--Table for showing data and set display to none to hide the table initialy-->
+    <table id="table" style="display: none">
+      <thead>
+        <!--table head row-->
+        <tr>
+          <th>Customer Name</th>
+          <th>Email Address</th>
+          <th>Date of Birth</th>
+          <th>Bonus in GBP</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <br /><br />
+    <!--span and div tag which showing the total customers, bonuses and all emails-->
+    <span id="LengthOfCustomers"></span>
+    <span id="TotalBonusCount"></span>
+    <div id="listOfEmails"></div>
+    <br /><br />
+    <script>
+      // fetchCustomersDataFromServer function its execute on button click
+      const fetchCustomersDataFromServer = async () => {
+        // APi URL where data of cusotmers exist
+        const apiUrl = "https://nms.kcl.ac.uk/leonardo.magela/api/5CCS2INS/customers/1953-05-25"
+        // fetch function which send request to server on above url and then get back the response
+        await fetch(apiUrl)
+          .then((res) => res.json()) // converting response to json format
+          .then((res) => {
+            let lenOfCstmrsData = res.length; // length of customers
+            let bnsCnt = 0; // initialize bonus count variable with 0
+            let emails = ""; // creating emails variable
+            const tblBody = document.querySelector("#table tbody"); // accessing table body dom element
+            tblBody.innerHTML = ""; // empty table body if anything is exist
+            // iterating over response data
+            res.forEach((item) => {
+              const tblBodyRow = tblBody.insertRow(); //inserting a new row on table body
+              // below is creating cell in row and then writing name, email, dob, and bonus
+              tblBodyRow.insertCell().textContent = item.name;
+              tblBodyRow.insertCell().textContent = item.email;
+              tblBodyRow.insertCell().textContent = item.dob;
+              tblBodyRow.insertCell().textContent = "£" + item.bonus;
+              bnsCnt += Number(item.bonus); // increment bonus count by each bonus value
+              emails += item.email + ", "; // concatenate email to emails variable
+            });
+            const _emails = document.getElementById("listOfEmails"); // accessing tag by id for showing emails
+            const _lenCstmrsView = document.getElementById("LengthOfCustomers"); // accessing element by id for showing total customers
+            const _totalBnsView = document.getElementById("TotalBonusCount"); // accessing tag by id to show total bonus count
+            _emails.innerHTML = emails; // setting all emails values to _emails element
+            _lenCstmrsView.innerHTML = "Total Customers: " + lenOfCstmrsData; // writing total customers to the element
+            _totalBnsView.innerHTML = "Total Bonus Count: £" + bnsCnt; // writing total bonus on _totalBnsView element
+            const table = document.getElementById("table"); // accessing table element
+            table.style.display = "block"; // change table css property display to block
+          });
+      };
+    </script>
+  </body>
+</html>

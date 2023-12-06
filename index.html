@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CUSTOMER BONUS PAGE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h1>Welcome to Customer Bonus Page</h1>
+    <button onclick="getData()">Get Data</button>
+ <script> 
+   const getData = async () => {
+      //const url = "https://nms.kcl.ac.uk/leonardo.magela/api/5CCS2INS/customers/1953-05-25"
+      const url = "./data.json"
+      await fetch(url)
+            .then(res => res.json())
+            .then(res => console.log(res))
+   }
+ </script>
+  </body>
+</html>
